@@ -6,6 +6,6 @@
 - \>name        //tail another command, the lines save to name.([]string)
 - \?name       //print name, name.Value in console, for debug
 -  %name       //string buffer is string[]
--\:name num         //a tag , for goto command. nu means add num line default = 0
--\~name      //goto tag:name
--\<name file       //output buffer to file.
+- \:name num         //a tag , for goto command. nu means add num line default = 0
+- \~name      //goto tag:name
+- \<name file       //output buffer to file.
