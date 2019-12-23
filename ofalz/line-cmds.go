@@ -12,6 +12,9 @@ func DftLcOfalz(ocm map[string]RegitstCmd) *OutFileAlz {
 	res.AddLineCmd('~', lc_goto)
 	res.AddLineCmd('$', lc_execMuti)
 	res.AddLineCmd('!', lc_execLine)
+	res.AddLineCmd('/', lc_comment)
+	res.AddLineCmd('%', lc_cache)
+	res.AddLineCmd(':', lc_tag)
 	return res
 }
 
@@ -35,7 +38,7 @@ func lc_updateVar(this *OutFileAlz, line string) error {
 	slt := strings.Split(line, ",")
 	for _, keyVal := range slt {
 		eqaPos := strings.Index(keyVal, "=")
-		if eqaPos == -1{
+		if eqaPos == -1 {
 			this.Warning("<@>Unexpected Input", keyVal)
 			continue
 		}
@@ -51,14 +54,14 @@ func lc_mutiLineVar(this *OutFileAlz, line string) error {
 	key := strings.TrimSpace(line)
 	arrList := []string{}
 	this.Ptr++
-	for this.Ptr < len(this.CmdList){
+	for this.Ptr < len(this.CmdList) {
 		firstChar := []rune(this.CmdList[this.Ptr])[0]
-		if _, ok := this.LineCmdMap[firstChar]; ok{
+		if _, ok := this.LineCmdMap[firstChar]; ok {
 			break
 		}
-		if firstChar == '\\'{
+		if firstChar == '\\' {
 			arrList = append(arrList, this.CmdList[this.Ptr][1:])
-		}else {
+		} else {
 			arrList = append(arrList, this.CmdList[this.Ptr])
 		}
 		this.Ptr++
@@ -78,9 +81,9 @@ func lc_goto(this *OutFileAlz, line string) error {
 //$
 func lc_execMuti(this *OutFileAlz, line string) error {
 	cmd := strings.Split(line, " ")[0]
-	if f, ok := this.Ocm[cmd]; ok{
+	if f, ok := this.Ocm[cmd]; ok {
 		vars := strings.Split(line[len(cmd):], ",")
-		for i := range vars{
+		for i := range vars {
 			vars[i] = strings.TrimSpace(vars[i])
 		}
 		return f(this, vars...)
@@ -92,7 +95,7 @@ func lc_execMuti(this *OutFileAlz, line string) error {
 //!
 func lc_execLine(this *OutFileAlz, line string) error {
 	cmd := strings.Split(line, " ")[0]
-	if f, ok := this.Ocm[cmd]; ok{
+	if f, ok := this.Ocm[cmd]; ok {
 		return f(this, strings.TrimSpace(line[len(cmd):]))
 	}
 	this.Warning("Register Cmd Not Found %s", cmd)
@@ -106,9 +109,16 @@ func lc_tag(this *OutFileAlz, line string) error {
 	return nil
 }
 
-//$
+//%
 func lc_cache(this *OutFileAlz, line string) error {
 	key := strings.TrimSpace(line)
 	this.Kamap[key] = []string{}
+	return nil
+}
+
+//    '/'
+func lc_comment(this *OutFileAlz, line string) error {
+	this = this
+	line = line
 	return nil
 }
