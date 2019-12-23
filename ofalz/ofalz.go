@@ -22,12 +22,17 @@ type OutFileAlz struct {
 
 func NewOfalz(ocm map[string]RegitstCmd) *OutFileAlz {
 	return  &OutFileAlz{Ocm: ocm, Kmap: map[string]string{}, Kamap: map[string][]string{}, IntMap: map[string]int{},
-		FloatMap: map[string]float64{}, MapMap: map[string]map[string]interface{}{}, LineCmdMap: map[rune]LineCmdFunc{}}
+		FloatMap: map[string]float64{},TagMap:map[string]int{}, MapMap: map[string]map[string]interface{}{}, LineCmdMap: map[rune]LineCmdFunc{}}
 }
 
 type RegitstCmd func(this *OutFileAlz, prms ...string) error
 
 func (this *OutFileAlz) Run() error {
+	for i := this.Ptr; i < len(this.CmdList); i++{
+		if []rune(this.CmdList[i])[0] == ':'{
+			this.TagMap[strings.TrimSpace(this.CmdList[i][1:])] = i
+		}
+	}
 	for this.Ptr < len(this.CmdList) {
 		this.Exec()
 	}

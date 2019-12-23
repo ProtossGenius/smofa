@@ -1,4 +1,8 @@
 @1=nihaonihaoh
+~start
+这里应该被跳过
+$echo 这里应该被跳过
+:start
 ?1
 >hello
 aldkjflad
