@@ -118,7 +118,6 @@ func lc_cache(this *OutFileAlz, line string) error {
 
 //    '/'
 func lc_comment(this *OutFileAlz, line string) error {
-	this = this
-	line = line
+	_, _ = this, line
 	return nil
 }
