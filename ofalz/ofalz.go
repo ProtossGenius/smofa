@@ -29,7 +29,8 @@ type RegitstCmd func(this *OutFileAlz, prms ...string) error
 
 func (this *OutFileAlz) Run() error {
 	for i := this.Ptr; i < len(this.CmdList); i++{
-		if []rune(this.CmdList[i])[0] == ':'{
+		rStr := []rune(this.CmdList[i])
+		if len(rStr) > 0 && rStr[0] == ':'{
 			this.TagMap[strings.TrimSpace(this.CmdList[i][1:])] = i
 		}
 	}

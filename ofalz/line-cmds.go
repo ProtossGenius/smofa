@@ -55,13 +55,15 @@ func lc_mutiLineVar(this *OutFileAlz, line string) error {
 	arrList := []string{}
 	this.Ptr++
 	for this.Ptr < len(this.CmdList) {
-		firstChar := []rune(this.CmdList[this.Ptr])[0]
-		if _, ok := this.LineCmdMap[firstChar]; ok {
-			break
-		}
-		if firstChar == '\\' {
-			arrList = append(arrList, this.CmdList[this.Ptr][1:])
-		} else {
+		if len(this.CmdList[this.Ptr]) > 0{
+			firstChar := []rune(this.CmdList[this.Ptr])[0]
+			if _, ok := this.LineCmdMap[firstChar]; ok {
+				break
+			}
+			if firstChar == '\\' {
+				arrList = append(arrList, this.CmdList[this.Ptr][1:])
+			}
+		}else {
 			arrList = append(arrList, this.CmdList[this.Ptr])
 		}
 		this.Ptr++
