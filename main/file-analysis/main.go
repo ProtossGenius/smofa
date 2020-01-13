@@ -2,10 +2,11 @@ package main
 
 import (
 	"flag"
-	"github.com/ProtossGenius/smofa/ofalz"
-	"os"
 	"io/ioutil"
+	"os"
 	"strings"
+
+	"github.com/ProtossGenius/smofa"
 )
 
 func FileReadAll(path string) ([]byte, error) {
@@ -19,12 +20,12 @@ func FileReadAll(path string) ([]byte, error) {
 }
 
 func check(err error) {
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 }
 
-func rc_echo(this *ofalz.OutFileAlz, prms ...string) error{
+func rc_echo(this *smofa.OutFileAlz, prms ...string) error {
 	this.Print("%v", prms)
 	return nil
 }
@@ -32,8 +33,8 @@ func rc_echo(this *ofalz.OutFileAlz, prms ...string) error{
 func main() {
 	in := flag.String("in", "./datas/test.ofa", "in put file")
 	flag.Parse()
-	ofa := ofalz.DftLcOfalz(map[string]ofalz.RegitstCmd{"echo": rc_echo})
-	bts , err := FileReadAll(*in)
+	ofa := smofa.DftLcOfalz(map[string]smofa.RegistCmd{"echo": rc_echo})
+	bts, err := FileReadAll(*in)
 	check(err)
 	ofa.AppendExec(strings.Split(string(bts), "\n")...)
 

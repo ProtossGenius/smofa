@@ -1,10 +1,10 @@
-package ofalz
+package smofa
 
 import (
 	"strings"
 )
 
-func DftLcOfalz(ocm map[string]RegitstCmd) *OutFileAlz {
+func DftLcOfalz(ocm map[string]RegistCmd) *OutFileAlz {
 	res := NewOfalz(ocm)
 	res.AddLineCmd('?', lc_debugInfo)
 	res.AddLineCmd('@', lc_updateVar)
@@ -55,7 +55,7 @@ func lc_mutiLineVar(this *OutFileAlz, line string) error {
 	arrList := []string{}
 	this.Ptr++
 	for this.Ptr < len(this.CmdList) {
-		if len(this.CmdList[this.Ptr]) > 0{
+		if len(this.CmdList[this.Ptr]) > 0 {
 			firstChar := []rune(this.CmdList[this.Ptr])[0]
 			if _, ok := this.LineCmdMap[firstChar]; ok {
 				break
@@ -63,7 +63,7 @@ func lc_mutiLineVar(this *OutFileAlz, line string) error {
 			if firstChar == '\\' {
 				arrList = append(arrList, this.CmdList[this.Ptr][1:])
 			}
-		}else {
+		} else {
 			arrList = append(arrList, this.CmdList[this.Ptr])
 		}
 		this.Ptr++

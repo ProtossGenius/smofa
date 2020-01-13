@@ -1,8 +1,8 @@
-package ofalz
+package smofa
 
 import (
-	"strings"
 	"fmt"
+	"strings"
 )
 
 type LineCmdFunc func(this *OutFileAlz, line string) error
@@ -11,7 +11,7 @@ type OutFileAlz struct {
 	CmdList    []string
 	Ptr        int
 	LineCmdMap map[rune]LineCmdFunc
-	Ocm        map[string]RegitstCmd
+	Ocm        map[string]RegistCmd
 	Kmap       map[string]string
 	Kamap      map[string][]string
 	TagMap     map[string]int
@@ -20,17 +20,17 @@ type OutFileAlz struct {
 	MapMap     map[string]map[string]interface{}
 }
 
-func NewOfalz(ocm map[string]RegitstCmd) *OutFileAlz {
-	return  &OutFileAlz{Ocm: ocm, Kmap: map[string]string{}, Kamap: map[string][]string{}, IntMap: map[string]int{},
-		FloatMap: map[string]float64{},TagMap:map[string]int{}, MapMap: map[string]map[string]interface{}{}, LineCmdMap: map[rune]LineCmdFunc{}}
+func NewOfalz(ocm map[string]RegistCmd) *OutFileAlz {
+	return &OutFileAlz{Ocm: ocm, Kmap: map[string]string{}, Kamap: map[string][]string{}, IntMap: map[string]int{},
+		FloatMap: map[string]float64{}, TagMap: map[string]int{}, MapMap: map[string]map[string]interface{}{}, LineCmdMap: map[rune]LineCmdFunc{}}
 }
 
-type RegitstCmd func(this *OutFileAlz, prms ...string) error
+type RegistCmd func(this *OutFileAlz, prms ...string) error
 
 func (this *OutFileAlz) Run() error {
-	for i := this.Ptr; i < len(this.CmdList); i++{
+	for i := this.Ptr; i < len(this.CmdList); i++ {
 		rStr := []rune(this.CmdList[i])
-		if len(rStr) > 0 && rStr[0] == ':'{
+		if len(rStr) > 0 && rStr[0] == ':' {
 			this.TagMap[strings.TrimSpace(this.CmdList[i][1:])] = i
 		}
 	}
@@ -42,7 +42,7 @@ func (this *OutFileAlz) Run() error {
 
 func (this *OutFileAlz) Exec() error {
 	line := this.CmdList[this.Ptr]
-	defer func() {this.Ptr++}()
+	defer func() { this.Ptr++ }()
 	if len(line) == 0 {
 		return nil
 	}
@@ -51,7 +51,7 @@ func (this *OutFileAlz) Exec() error {
 		if err != nil {
 			return err
 		}
-	}else {
+	} else {
 		this.Warning("no cmd line : [%d]%s", this.Ptr, line)
 	}
 	return nil
@@ -62,12 +62,12 @@ func (this *OutFileAlz) AppendExec(cmd ...string) error {
 	return this.Run()
 }
 
-func (this *OutFileAlz) Warning(f string, v ...interface{}){
-	fmt.Printf("[Warning]" + f + "\n", v...)
+func (this *OutFileAlz) Warning(f string, v ...interface{}) {
+	fmt.Printf("[Warning]"+f+"\n", v...)
 }
 
-func (this *OutFileAlz) Print(f string, v ...interface{}){
-	fmt.Printf(f + "\n", v...)
+func (this *OutFileAlz) Print(f string, v ...interface{}) {
+	fmt.Printf(f+"\n", v...)
 }
 
 func (this *OutFileAlz) GetString(key string) (val string, ok bool) {
@@ -79,12 +79,12 @@ func (this *OutFileAlz) GetString(key string) (val string, ok bool) {
 	return "", false
 }
 
-func (this *OutFileAlz) GetTag(tag string) int{
+func (this *OutFileAlz) GetTag(tag string) int {
 	tag = strings.TrimSpace(tag)
-	if tag == "end"{
+	if tag == "end" {
 		return len(this.CmdList)
 	}
-	if val, ok := this.TagMap[tag]; ok{
+	if val, ok := this.TagMap[tag]; ok {
 		return val
 	}
 	return -1
@@ -92,9 +92,9 @@ func (this *OutFileAlz) GetTag(tag string) int{
 
 func (this *OutFileAlz) Goto(tag string) {
 	idx := this.GetTag(tag)
-	if idx < 0{
+	if idx < 0 {
 		this.Warning("No such Tag %s", tag)
-	}else {
+	} else {
 		this.Ptr = idx
 	}
 }
